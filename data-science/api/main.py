@@ -4,6 +4,9 @@ import joblib
 from pathlib import Path
 from datetime import datetime
 import logging
+from fastapi import Depends, Header
+from typing import Optional
+
 
 # Configurar logger de uvicorn
 logger = logging.getLogger("uvicorn")
@@ -72,6 +75,19 @@ def health():
             "en": pipeline_en is not None
         }
     }
+# =========================
+# AUTH
+# =========================
+@app.post("/api/auth/login", response_model=LoginResponse)
+def login(data: LoginRequest):
+
+    # 🔐 Usuario hardcodeado (MVP / hackathon)
+    if data.username == "admin" and data.password == "1234":
+        return {
+            "token": "fake-jwt-token-123"
+        }
+
+    raise HTTPException(status_code=401, detail="Credenciales incorrectas")
 
 # =========================
 # PREDICT
@@ -98,3 +114,12 @@ def predict(request: SentimentRequest):
         probability=round(float(probability), 4),
         timestamp=datetime.now().isoformat()
     )
+# =========================
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+class LoginResponse(BaseModel):
+    token: str
+
