@@ -1,16 +1,130 @@
-# React + Vite
+# Frontend – Hackathon Sentiment Analysis
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend web del proyecto **Hackathon Sentiment Analysis**, desarrollado con **React + Vite + TailwindCSS**.  
+Permite a los usuarios autenticarse y analizar texto para obtener su **sentimiento (positivo / negativo)** usando un servicio de Machine Learning.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🧱 Arquitectura General
 
-## React Compiler
+```text
+React (Frontend)
+   ↓ HTTP (JSON)
+FastAPI (ML Service)
+   ↓
+Modelo scikit-learn (sentiment analysis)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Expanding the ESLint configuration
+📂 Estructura del Proyecto
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+frontend-vite/
+├── public/
+│   ├── images/
+│   └── index.html
+├── src/
+│   ├── api/
+│   │   └── sentimentApi.js     # Llamadas HTTP al backend ML
+│   ├── assets/
+│   │   └── tailwind.css        # Estilos base Tailwind
+│   ├── components/             # Componentes reutilizables
+│   ├── pages/
+│   │   ├── Dashboard.jsx       # Análisis de sentimientos
+│   │   ├── Login.jsx           # Login de usuario
+│   │   └── Register.jsx        # Registro de usuario
+│   ├── routes/
+│   │   └── ProtectedRoute.jsx  # Rutas protegidas
+│   ├── App.jsx                 # Definición de rutas
+│   ├── main.jsx                # Entry point React
+│   └── index.css
+├── tailwind.config.js
+├── postcss.config.js
+├── vite.config.js
+├── package.json
+└── README.md
+
+
+
+Tecnologuias Usadas:
+
+React 18
+Vite
+Tailwind CSS
+React Router DOM
+Axios
+JavaScript (ES6*)
+
+
+⚙️ Instalación y Ejecución
+1️⃣ Entrar a la carpeta frontend
+cd frontend-vite
+
+2️⃣ Instalar dependencias
+npm install
+
+3️⃣ Ejecutar en modo desarrollo
+npm run dev
+
+
+📍 La aplicación estará disponible en:
+👉 http://localhost:5173
+
+🔌 Conexión con el Backend (FastAPI)
+
+El frontend consume el endpoint de predicción:
+
+POST http://127.0.0.1:8000/predict
+
+
+Ejemplo de payload enviado:
+
+{
+  "text": "Me encanta este proyecto",
+  "lang": "es"
+}
+
+
+Ejemplo de respuesta:
+
+{
+  "prediction": "Positivo",
+  "probability": 0.99,
+  "timestamp": "2026-01-19T18:42:44"
+}
+
+🧪 Flujo de Uso
+
+Usuario inicia sesión o se registra
+
+Accede al Dashboard
+
+Ingresa texto a analizar
+
+Frontend envía el texto al servicio FastAPI
+
+Se muestra el resultado del sentimiento y su probabilidad
+
+🛠 Estado Actual
+
+✅ Estructura base completa
+
+✅ Routing configurado
+
+✅ Integración con FastAPI
+
+✅ Tailwind configurado
+
+🔄 Autenticación en desarrollo
+
+🔄 Validaciones UI pendientes
+
+👥 Equipo – Frontend
+
+Frontend Developer: [Eduin Pino]
+
+Proyecto Hackathon ONE
+
+📌 Notas
+
+Este frontend está pensado para ser independiente del backend Spring Boot
+
+Se puede integrar posteriormente vía API Gateway o backend intermedio

@@ -3,6 +3,10 @@ from pydantic import BaseModel
 import joblib
 from pathlib import Path
 from datetime import datetime
+import logging
+
+# Configurar logger de uvicorn
+logger = logging.getLogger("uvicorn")
 
 app = FastAPI(
     title="Sentiment Analysis ML Service",
@@ -12,11 +16,12 @@ app = FastAPI(
 # =========================
 # RUTAS
 # =========================
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parents[1] # Ruta de la app
 MODELS_DIR = BASE_DIR / "models"
 
 PIPELINE_ES = MODELS_DIR / "pipeline_sentimientos_español.pkl"
 PIPELINE_EN = MODELS_DIR / "pipeline_sentimientos_ingles.pkl"
+
 
 pipeline_es = None
 pipeline_en = None
@@ -42,13 +47,18 @@ def load_models():
     try:
         if PIPELINE_ES.exists():
             pipeline_es = joblib.load(PIPELINE_ES)
-            print("Modelo español cargado")
+            logger.info(f"✅ Modelo español cargado desde: {PIPELINE_ES}")
+        else:
+            logger.warning(f"⚠️ No se encontró el modelo español en: {PIPELINE_ES}")
 
         if PIPELINE_EN.exists():
             pipeline_en = joblib.load(PIPELINE_EN)
-            print("Modelo inglés cargado")
+            logger.info(f"✅ Modelo inglés cargado desde: {PIPELINE_EN}")
+        else:
+            logger.warning(f"⚠️ No se encontró el modelo inglés en: {PIPELINE_EN}")
+
     except Exception as e:
-        print("Error cargando modelos:", e)
+        logger.error(f"❌ Error cargando modelos: {e}")
 
 # =========================
 # HEALTH CHECK

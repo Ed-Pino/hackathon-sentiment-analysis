@@ -1,11 +1,8 @@
 export async function analyzeSentiment(text, lang = "es") {
-  const token = localStorage.getItem("token");
-
-  const res = await fetch("http://localhost:8080/api/sentiment/analyze", {
+  const res = await fetch("http://127.0.0.1:8000/predict", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ text, lang }),
   });
